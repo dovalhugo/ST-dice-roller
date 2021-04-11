@@ -2,6 +2,7 @@ import config
 import random
 import re
 import logging
+import Commands as cmds
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 
@@ -57,95 +58,13 @@ def dice_arg_reader(dice_arguments):
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a Chronicles of Darkness dice simple roller. Type /help for instructions")
 
-#Roll dice_pool with 10-again normally or as Rote action
-def sr(update, context):
-    try:
-        dice_arguments = str(context.args[0])        
-        dice_pool, isRote, wrong_arg = dice_arg_reader(dice_arguments)
-
-        if wrong_arg:
-            raise Exception(update.message.reply_text('Invalid argument. Use "r" if you want to roll a Rote Action'))
-
-        mode = {
-        'again':10,
-        'isRote':isRote,
-        'isChance':False,   
-        }
-
-        successes, rolls = st_roller(dice_pool, mode)
-        update.message.reply_text("Sucesses: "+str(successes)+" || Dices: "+str(rolls))
-
-    except (IndexError, ValueError):
-        update.message.reply_text('Not enough dices!')        
-
-#Roll dice_pool with 8-again normally or as Rote action
-def sr8(update, context):
-    try:
-        dice_arguments = str(context.args[0])        
-        dice_pool, isRote, wrong_arg = dice_arg_reader(dice_arguments)
-        if wrong_arg:
-            raise Exception(update.message.reply_text('Invalid argument. Use "r" if you want to roll a Rote Action'))         
-
-        mode = {
-        'again':8,
-        'isRote':isRote,
-        'isChance':False,   
-        }
-
-        successes, rolls = st_roller(dice_pool, mode)
-        update.message.reply_text("Sucesses: "+str(successes)+" || Dices: "+str(rolls))
-
-    except (IndexError, ValueError):
-        update.message.reply_text('Not enough dices!')
-
-#Roll dice_pool with 9-again normally or as Rote action
-def sr9(update, context):
-    try:
-        dice_arguments = str(context.args[0])        
-        dice_pool, isRote, wrong_arg = dice_arg_reader(dice_arguments)            
-        if wrong_arg:
-            raise Exception(update.message.reply_text('Invalid argument. Use "r" if you want to roll a Rote Action'))
-
-        mode = {
-        'again':9,
-        'isRote':isRote,
-        'isChance':False,   
-        }
-
-        successes, rolls = st_roller(dice_pool, mode)
-        update.message.reply_text("Sucesses: "+str(successes)+" || Dices: "+str(rolls))
-
-    except (IndexError, ValueError):
-        update.message.reply_text('Not enough dices!')
-
-#Roll dice_pool of 1 as a chance die, setting up isChance flag to True
-def src(update, context):    
-    try:
-        dice_pool = 1 
-        if context.args:
-            dice_arguments = str(context.args[0])
-            if dice_arguments != 'r':
-                raise Exception(update.message.reply_text('Invalid argument. Use "r" if you want to roll a Rote Action'))
-            else:
-                isRote = True       
-        
-        isChance, isRote = True, False     
-        mode = {
-        'again':11,
-        'isRote':isRote,
-        'isChance':isChance,   
-        }
-
-        successes, rolls = st_roller(dice_pool, mode)
-        update.message.reply_text("Sucesses: "+str(successes)+" || Dices: "+str(rolls))
-
-    except (ValueError):
-        update.message.reply_text('Something went wrong, perhaps too many arguments!')
-
 #Main function which mainly contain necessary handlers and dispatchers from Telegram API
 def main():
     #Import telegram api token key
     token_id = config.telegram_token
+
+    #Defining commands handlers variables
+    sr, sr8, sr9, src, drink = cmds.sr, cmds.sr8, cmds.sr9, cmds.src, cmds.drink
 
     # Telegram must have basics and Logging
     updater = Updater(token=token_id, use_context=True) #Remember to copy TOKEN from telegram's botFather
@@ -158,11 +77,13 @@ def main():
     sr8_handler = CommandHandler('sr8',sr8)
     sr9_handler = CommandHandler('sr9',sr9)
     src_handler = CommandHandler('src',src)
+    drink_handler = CommandHandler('drink',drink)
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(sr_handler)
     dispatcher.add_handler(sr8_handler)
     dispatcher.add_handler(sr9_handler)
     dispatcher.add_handler(src_handler)
+    dispatcher.add_handler(drink_handler)
 
     #Bot initialization
     updater.start_polling()
