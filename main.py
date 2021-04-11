@@ -5,7 +5,7 @@ import logging
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 
-# Method for rolling dies as per Storytelling (CofD 2e) system,
+# Method for rolling dices as per Storytelling (CofD 2e) system,
 # Rolls are stored for exhibition purposes only
 def st_roller(dice_pool, mode):
     successes = 0
@@ -73,10 +73,10 @@ def sr(update, context):
         }
 
         successes, rolls = st_roller(dice_pool, mode)
-        update.message.reply_text("Sucesses: "+str(successes)+" || Dados: "+str(rolls))
+        update.message.reply_text("Sucesses: "+str(successes)+" || Dices: "+str(rolls))
 
     except (IndexError, ValueError):
-        update.message.reply_text('Not enough dies!')        
+        update.message.reply_text('Not enough dices!')        
 
 #Roll dice_pool with 8-again normally or as Rote action
 def sr8(update, context):
@@ -93,10 +93,10 @@ def sr8(update, context):
         }
 
         successes, rolls = st_roller(dice_pool, mode)
-        update.message.reply_text("Sucesses: "+str(successes)+" || Dados: "+str(rolls))
+        update.message.reply_text("Sucesses: "+str(successes)+" || Dices: "+str(rolls))
 
     except (IndexError, ValueError):
-        update.message.reply_text('Not enough dies!')
+        update.message.reply_text('Not enough dices!')
 
 #Roll dice_pool with 9-again normally or as Rote action
 def sr9(update, context):
@@ -113,10 +113,10 @@ def sr9(update, context):
         }
 
         successes, rolls = st_roller(dice_pool, mode)
-        update.message.reply_text("Sucesses: "+str(successes)+" || Dados: "+str(rolls))
+        update.message.reply_text("Sucesses: "+str(successes)+" || Dices: "+str(rolls))
 
     except (IndexError, ValueError):
-        update.message.reply_text('Not enough dies!')
+        update.message.reply_text('Not enough dices!')
 
 #Roll dice_pool of 1 as a chance die, setting up isChance flag to True
 def src(update, context):    
@@ -137,7 +137,7 @@ def src(update, context):
         }
 
         successes, rolls = st_roller(dice_pool, mode)
-        update.message.reply_text("Sucesses: "+str(successes)+" || Dados: "+str(rolls))
+        update.message.reply_text("Sucesses: "+str(successes)+" || Dices: "+str(rolls))
 
     except (ValueError):
         update.message.reply_text('Something went wrong, perhaps too many arguments!')
