@@ -48,7 +48,7 @@ def dice_arg_reader(dice_arguments):
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a Chronicles of Darkness dice simple roller. Type /help for instructions")
 
-#Roll dice_pool with 10-again normally
+#Roll dice_pool with 10-again normally or as Rote action
 def sr(update, context):
     try:
         dice_arguments = str(context.args[0])        
@@ -65,6 +65,7 @@ def sr(update, context):
     except (IndexError, ValueError):
         update.message.reply_text('Not enough dies!')
 
+#Roll dice_pool with 8-again normally or as Rote action
 def sr8(update, context):
     try:
         dice_arguments = str(context.args[0])        
@@ -81,6 +82,7 @@ def sr8(update, context):
     except (IndexError, ValueError):
         update.message.reply_text('Not enough dies!')
 
+#Roll dice_pool with 9-again normally or as Rote action
 def sr9(update, context):
     try:
         dice_arguments = str(context.args[0])        
@@ -97,6 +99,7 @@ def sr9(update, context):
     except (IndexError, ValueError):
         update.message.reply_text('Not enough dies!')
 
+#Roll dice_pool of 1 as a chance die, setting up isChance flag to True
 def src(update, context):    
     try:
         dice_pool = 1 
@@ -116,26 +119,28 @@ def src(update, context):
         update.message.reply_text('Something went wrong, perhaps too many arguments!')
 
 
-# Telegram must have basics and Logging
-updater = Updater(token='1775606717:AAF65GiWEgQP1ThrmUZfs2dU6d3pnXi8Buc', use_context=True) #Remember to copy TOKEN from telegram's botFather
-dispatcher = updater.dispatcher
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-#CommandHandler
-start_handler = CommandHandler('start', start)
-sr_handler = CommandHandler('sr',sr)
-sr8_handler = CommandHandler('sr8',sr8)
-sr9_handler = CommandHandler('sr9',sr9)
-src_handler = CommandHandler('src',src)
-dispatcher.add_handler(start_handler)
-dispatcher.add_handler(sr_handler)
-dispatcher.add_handler(sr8_handler)
-dispatcher.add_handler(sr9_handler)
-dispatcher.add_handler(src_handler)
+def main():
+    # Telegram must have basics and Logging
+    updater = Updater(token='1775606717:AAF65GiWEgQP1ThrmUZfs2dU6d3pnXi8Buc', use_context=True) #Remember to copy TOKEN from telegram's botFather
+    dispatcher = updater.dispatcher
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-#Bot initiation
-updater.start_polling()
+    #Command Handlers
+    start_handler = CommandHandler('start', start)
+    sr_handler = CommandHandler('sr',sr)
+    sr8_handler = CommandHandler('sr8',sr8)
+    sr9_handler = CommandHandler('sr9',sr9)
+    src_handler = CommandHandler('src',src)
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(sr_handler)
+    dispatcher.add_handler(sr8_handler)
+    dispatcher.add_handler(sr9_handler)
+    dispatcher.add_handler(src_handler)
 
-#Mode is user input. Can be 8,9 or 10-again, also a chance die or no-again. Finally it should input if Rote or not
+    #Bot initiation
+    updater.start_polling()
 
+if __name__ == '__main__':
+    main()
 
