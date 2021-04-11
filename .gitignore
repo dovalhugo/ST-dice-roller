@@ -3,3 +3,4 @@ config.py
 settings.json
 _pycache_/
 config.cpython-39.pyc
+.gitignore
